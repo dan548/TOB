@@ -62,7 +62,7 @@ fun main() {
                         '1', '2' -> if (subtractOfferFunc(currentOffer, order.amount)) {
                             instrumentBuySell.first.remove(order.price)
                             if (maxOfferPrice == currentOffer.price) res =
-                                if (instrumentBuySell.first.isNotEmpty()) instrumentBuySell.first.lastEntry().value else Offer(
+                                instrumentBuySell.first.lastEntry()?.value ?: Offer(
                                     instrumentId = order.instrumentId,
                                     side = order.side,
                                     price = 0L,
@@ -98,7 +98,7 @@ fun main() {
                         '1', '2' -> if (subtractOfferFunc(currentOffer, order.amount)) {
                             instrumentBuySell.second.remove(order.price)
                             if (minOfferPrice != currentOffer.price) res =
-                                if (instrumentBuySell.second.isNotEmpty()) instrumentBuySell.second.firstEntry().value else Offer(
+                                instrumentBuySell.second.firstEntry()?.value ?: Offer(
                                     instrumentId = order.instrumentId,
                                     side = order.side,
                                     price = 999999999999999999L,
