@@ -4,14 +4,11 @@ import java.util.*
 
 
 data class Order(
-    val userId: String,
-    val clOrderId: String,
     val action: Char,
     val instrumentId: Int,
     val side: Char,
     val price: Long,
-    val amount: Int,
-    val amountRest: Int
+    val amount: Int
 )
 
 data class Offer(
@@ -20,6 +17,7 @@ data class Offer(
     val price: Long,
     var amount: Int
 ) {
+    constructor(offer: Offer) : this(offer.instrumentId, offer.side, offer.price, offer.amount)
     override fun toString(): String = "$instrumentId;$side;$price;$amount"
 }
 
@@ -32,19 +30,18 @@ fun main() {
         oldOffer.amount == 0
     }
 
+    var lastRes: Offer? = null
+
     while (true) {
         val str = readln()
         if (str == "exit") break
         val inputData = str.split(";")
         val order = Order(
-            userId = inputData[0],
-            clOrderId = inputData[1],
             action = inputData[2].single(),
             instrumentId = inputData[3].toInt(),
             side = inputData[4].single(),
             price = inputData[5].toLong(),
-            amount = inputData[6].toInt(),
-            amountRest = inputData[7].toInt()
+            amount = inputData[6].toInt()
         )
 
         var res: Offer? = null
@@ -124,6 +121,12 @@ fun main() {
             }
         }
 
-        println(res ?: "-")
+        if (res == lastRes) {
+            res = null
+        } else {
+            lastRes = res?.let { Offer(it) }
+        }
+
+        println(res ?: "")
     }
 }
